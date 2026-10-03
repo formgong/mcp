@@ -1,5 +1,7 @@
 # Formgong MCP server
 
+[![Formgong MCP connector – tool definition quality and endpoint health on Glama](https://glama.ai/mcp/connectors/com.formgong/mcp/badges/score.svg)](https://glama.ai/mcp/connectors/com.formgong/mcp)
+
 A remote [Model Context Protocol](https://modelcontextprotocol.io) server for [Formgong](https://formgong.com), a hosted form backend for static and AI-built websites. Your AI assistant can **create contact forms, get ready-to-paste form code and read recent submissions**, so you never have to copy access keys by hand.
 
 - **URL:** `https://formgong.com/mcp`
