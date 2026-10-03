@@ -15,6 +15,15 @@ A remote [Model Context Protocol](https://modelcontextprotocol.io) server for [F
 
 There's nothing to install: the server runs on formgong.com. This repo holds the documentation and the [`server.json`](./server.json) for the [official MCP Registry](https://registry.modelcontextprotocol.io) (`com.formgong/mcp`).
 
+## What Formgong does
+
+- **Delivery:** email and Telegram on every plan, including Free. Telegram connects with one button, groups included. Signed JSON webhooks (HMAC-SHA256 `X-Signature`, up to 5 delivery attempts) come with step-by-step recipes for [Make, n8n, Zapier and KeyCRM](https://formgong.com/en/integrations/).
+- **EU data:** submissions are stored in the EU (Cloudflare D1 with EU jurisdiction), and the IP address is kept only as a hash. A standard Art. 28 DPA is part of the [Terms](https://formgong.com/en/terms/).
+- **Spam:** no CAPTCHA puzzle and no cookies. There's a honeypot, cookie-free checks and optional Cloudflare Turnstile on every plan. Plain HTML forms without JavaScript keep working.
+- **12 languages:** the thank-you page, errors and auto-reply follow the visitor's language.
+- **Agencies:** [Projects](https://formgong.com/en/for/agencies/) group forms per client (up to 100 on every plan), with view-only client invites and handover to the client's own account.
+- **Pricing:** the free plan has 300 submissions a month and unlimited forms. Pro is $5 a month and Business $15 (as of Oct 2026). Free shows a small "Form powered by Formgong" link on the hosted thank-you page and in emails.
+
 ## Tools
 
 | Tool | Scope | What it does |
@@ -132,7 +141,8 @@ Any client that supports remote MCP over Streamable HTTP with custom headers wor
 ## Related
 
 - Starters: [nextjs-starter](https://github.com/formgong/nextjs-starter), [astro-starter](https://github.com/formgong/astro-starter), [html-starter](https://github.com/formgong/html-starter), [react-contact-form](https://github.com/formgong/react-contact-form)
-- npm: [`create-formgong`](https://www.npmjs.com/package/create-formgong), [`@formgong/react`](https://www.npmjs.com/package/@formgong/react)
+- npm ([source](https://github.com/formgong/js)): [`formgong`](https://www.npmjs.com/package/formgong) (`npx formgong init`), [`create-formgong`](https://www.npmjs.com/package/create-formgong), [`@formgong/react`](https://www.npmjs.com/package/@formgong/react) and packages for Next.js, Vue, Svelte, Astro and Angular
+- Integration recipes (Make, n8n, Zapier, KeyCRM): https://formgong.com/en/integrations/
 - Docs for AI builders: https://formgong.com/en/docs/
 
 ## License
