@@ -1,0 +1,32 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.formgong/mcp",
+  "title": "Formgong",
+  "description": "Create contact forms, get HTML/React/Next.js snippets and read recent submissions on Formgong.",
+  "version": "1.0.0",
+  "websiteUrl": "https://formgong.com/en/docs/mcp/",
+  "repository": {
+    "url": "https://github.com/formgong/mcp",
+    "source": "github"
+  },
+  "icons": [
+    {
+      "src": "https://formgong.com/favicon.svg",
+      "mimeType": "image/svg+xml"
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://formgong.com/mcp",
+      "headers": [
+        {
+          "name": "Authorization",
+          "description": "Bearer fgp_... personal API token from Formgong Dashboard > Account > API tokens",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}
