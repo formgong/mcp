@@ -8,7 +8,7 @@ A remote [Model Context Protocol](https://modelcontextprotocol.io) server for [F
 
 - **URL:** `https://formgong.com/mcp`
 - **Transport:** Streamable HTTP. It's stateless and returns JSON responses.
-- **Auth:** `Authorization: Bearer fgp_…` with a personal API token. OAuth is not supported yet.
+- **Auth:** `Authorization: Bearer fgp_…` with a personal API token, needed for tool calls. `initialize`, `ping` and `tools/list` work without a token, so clients and directories can see the tools. OAuth is not supported (no `WWW-Authenticate` challenge, no `/.well-known/oauth-*` documents).
 - **Docs:** https://formgong.com/en/docs/mcp/ (in 12 languages)
 
 There's nothing to install: the server runs on formgong.com. This repo holds the documentation and the [`server.json`](./server.json) for the [official MCP Registry](https://registry.modelcontextprotocol.io) (`com.formgong/mcp`).
@@ -122,7 +122,8 @@ Any client that supports remote MCP over Streamable HTTP with custom headers wor
 ## Security
 
 - Tokens are scoped (`forms:read`, `forms:write`, `submissions:read`), stored only as hashes, can expire, and can be revoked in the dashboard.
-- Each token can make 60 requests a minute, and failed authentication attempts are rate-limited per IP.
+- Each token can make 60 requests a minute. Requests without a token are limited to 30 a minute per IP, and failed authentication attempts are rate-limited per IP.
+- A tool call without a valid token gets a JSON-RPC error (code `-32001`) that says how to add the header and where to create the token.
 - The tools only see forms the token owner owns. Submissions never include IP addresses or user agents.
 - Report security issues to support@formgong.com.
 
