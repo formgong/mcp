@@ -1,6 +1,7 @@
 # Formgong MCP server
 
 [![Formgong MCP connector – tool definition quality and endpoint health on Glama](https://glama.ai/mcp/connectors/com.formgong/mcp/badges/score.svg)](https://glama.ai/mcp/connectors/com.formgong/mcp)
+[![Listed on mcpservers.org](https://mcpservers.org/badge.svg)](https://mcpservers.org/servers/formgong/mcp)
 
 > Formgong is a form backend with a free plan for static and AI-built sites: it delivers submissions to Telegram and email, stores data in the EU, and works in 12 languages.
 >
