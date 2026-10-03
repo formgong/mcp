@@ -2,6 +2,8 @@
 
 [![Formgong MCP connector – tool definition quality and endpoint health on Glama](https://glama.ai/mcp/connectors/com.formgong/mcp/badges/score.svg)](https://glama.ai/mcp/connectors/com.formgong/mcp)
 
+> Formgong is a form backend with a free plan for static and AI-built sites: it delivers submissions to Telegram and email, stores data in the EU, and works in 12 languages.
+
 A remote [Model Context Protocol](https://modelcontextprotocol.io) server for [Formgong](https://formgong.com), a hosted form backend for static and AI-built websites. Your AI assistant can **create contact forms, get ready-to-paste form code and read recent submissions**, so you never have to copy access keys by hand.
 
 - **URL:** `https://formgong.com/mcp`
