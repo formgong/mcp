@@ -3,7 +3,7 @@
   "name": "com.formgong/mcp",
   "title": "Formgong",
   "description": "Create contact forms, get HTML/React/Next.js snippets and read recent submissions on Formgong.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "websiteUrl": "https://formgong.com/en/docs/mcp/",
   "repository": {
     "url": "https://github.com/formgong/mcp",
@@ -22,8 +22,8 @@
       "headers": [
         {
           "name": "Authorization",
-          "description": "Bearer fgp_... personal API token from Formgong Dashboard > Account > API tokens",
-          "isRequired": true,
+          "description": "Optional. Only for clients that cannot do OAuth 2.1 discovery: \"Bearer fgp_...\" personal API token from Formgong Dashboard > Account > API tokens. Clients that follow the 401 WWW-Authenticate challenge sign in through the browser instead and must leave this empty.",
+          "isRequired": false,
           "isSecret": true
         }
       ]

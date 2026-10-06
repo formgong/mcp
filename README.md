@@ -11,7 +11,11 @@ A remote [Model Context Protocol](https://modelcontextprotocol.io) server for [F
 
 - **URL:** `https://formgong.com/mcp`
 - **Transport:** Streamable HTTP. It's stateless and returns JSON responses.
-- **Auth:** `Authorization: Bearer fgp_…` with a personal API token, needed for tool calls. `initialize`, `ping` and `tools/list` work without a token, so clients and directories can see the tools. OAuth is not supported (no `WWW-Authenticate` challenge, no `/.well-known/oauth-*` documents).
+- **Auth:** two ways, pick whichever your client supports.
+  - **OAuth 2.1** (recommended): authorization code with mandatory PKCE (S256) and [dynamic client registration](https://datatracker.ietf.org/doc/html/rfc7591) at `https://formgong.com/oauth/register`, so clients such as Claude Desktop, ChatGPT, Cursor and VS Code can connect with a browser sign-in and no copy-pasted secret. A tool call without credentials returns `401` with `WWW-Authenticate: Bearer realm="formgong", resource_metadata="https://formgong.com/.well-known/oauth-protected-resource/mcp", scope="forms:read forms:write"` ([RFC 9728](https://datatracker.ietf.org/doc/html/rfc9728)); metadata is at [`/.well-known/oauth-authorization-server`](https://formgong.com/.well-known/oauth-authorization-server) and [`/.well-known/oauth-protected-resource/mcp`](https://formgong.com/.well-known/oauth-protected-resource/mcp). Access tokens last 1 hour and rotate with refresh tokens.
+  - **Personal API token:** `Authorization: Bearer fgp_…` for clients that only send static headers.
+  - Either way, `initialize`, `ping` and `tools/list` work unauthenticated, so clients and directories can see the tools before signing in.
+- **Scopes:** `forms:read` (always granted), `forms:write`, `submissions:read` (off unless requested).
 - **Docs:** https://formgong.com/en/docs/mcp/ (in 12 languages)
 
 There's nothing to install: the server runs on formgong.com. This repo holds the documentation and the [`server.json`](./server.json) for the [official MCP Registry](https://registry.modelcontextprotocol.io) (`com.formgong/mcp`).
@@ -34,7 +38,9 @@ There's nothing to install: the server runs on formgong.com. This repo holds the
 | `get_form_snippet` | `forms:read` | Returns code for one form (`form_id`, `framework`: `html` / `react` / `next`, `lang`), with its access key, the `_lang` field, the `botcheck` honeypot, and Turnstile when it's enabled. |
 | `list_recent_submissions` | `submissions:read` | Read-only and opt-in. Returns up to 50 recent submissions with time and submitted fields only (no IP or user agent). Spam is excluded by default. Field values are marked as untrusted visitor input. |
 
-## 1. Create an API token
+## 1. Create an API token (only if your client can't do OAuth)
+
+Clients with an OAuth connector skip this step entirely — they sign you in through the browser. Create a token only for clients that send a static `Authorization` header.
 
 1. Sign up at https://formgong.com (the free plan includes 300 submissions a month, and data is stored in the EU), then confirm your email.
 2. Open **Dashboard → Account → API tokens**.
@@ -70,7 +76,9 @@ claude mcp add --transport http formgong https://formgong.com/mcp \
 
 ### Claude Desktop
 
-Custom connectors in Settings → Connectors require OAuth, which Formgong doesn't support yet. Instead, use the [`mcp-remote`](https://www.npmjs.com/package/mcp-remote) bridge (it requires Node.js) in `claude_desktop_config.json`, then restart Claude Desktop:
+Settings → Connectors → Add custom connector, enter `https://formgong.com/mcp` and click Connect. Claude Desktop discovers the OAuth metadata from the `401` challenge, registers itself dynamically and opens a browser window where you approve the scopes — no token to paste.
+
+If your client can't do OAuth and only sends static headers, use the [`mcp-remote`](https://www.npmjs.com/package/mcp-remote) bridge (it requires Node.js) in `claude_desktop_config.json`, then restart Claude Desktop:
 
 ```json
 {
@@ -123,7 +131,7 @@ Custom connectors in Settings → Connectors require OAuth, which Formgong doesn
 
 ### Other clients
 
-Any client that supports remote MCP over Streamable HTTP with custom headers works with the same URL and header. Clients that only support stdio can use the `mcp-remote` bridge shown above.
+Any client that supports remote MCP over Streamable HTTP works with the same URL. Clients that implement OAuth 2.1 discovery (the `401` + `WWW-Authenticate` flow) sign in through the browser and need no configuration beyond the URL. Clients that only send static headers use the token header shown above. Clients limited to stdio can use the `mcp-remote` bridge.
 
 ## Try it
 
@@ -134,8 +142,9 @@ Any client that supports remote MCP over Streamable HTTP with custom headers wor
 ## Security
 
 - Tokens are scoped (`forms:read`, `forms:write`, `submissions:read`), stored only as hashes, can expire, and can be revoked in the dashboard.
+- OAuth grants work the same way: `submissions:read` is never granted unless the client asks for it, access tokens expire after 1 hour, refresh tokens after 30 days with rotation, and every connected app is listed under **Dashboard → Account → API tokens**, where you can revoke it. `https://formgong.com/oauth/revoke` implements [RFC 7009](https://datatracker.ietf.org/doc/html/rfc7009).
 - Each token can make 60 requests a minute. Requests without a token are limited to 30 a minute per IP, and failed authentication attempts are rate-limited per IP.
-- A tool call without a valid token gets a JSON-RPC error (code `-32001`) that says how to add the header and where to create the token.
+- A tool call without valid credentials gets HTTP `401` with a JSON-RPC error (code `-32001`) whose `data` carries `resourceMetadata`, so a client can start the OAuth flow or tell the user where to create a token.
 - The tools only see forms the token owner owns. Submissions never include IP addresses or user agents.
 - Report security issues to support@formgong.com.
 
