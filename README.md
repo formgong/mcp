@@ -136,7 +136,7 @@ The setup controls are documented by [Lovable](https://docs.lovable.dev/integrat
 
 ### v0
 
-Use the [v0 contact-form guide](https://formgong.com/en/docs/v0/) and its form prompt. The guide uses direct submissions to Formgong. Custom MCP integration through the [v0 API](https://v0.app/docs/api/v1/reference/chats/create) is a separate, programmatic workflow.
+Open the + menu beside the prompt and choose MCPs. Configure a custom server with URL `https://formgong.com/mcp`, choose Bearer Token and paste your personal Formgong API token. These controls are documented in [v0 MCP Integrations](https://v0.app/docs/MCP). Use a personal token because Formgong does not currently allow v0 OAuth callbacks. The [v0 contact-form guide](https://formgong.com/en/docs/v0/) also has a direct form prompt; the published form sends directly to Formgong.
 
 ### Other clients
 

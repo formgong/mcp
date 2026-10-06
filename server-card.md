@@ -12,7 +12,7 @@ Let your assistant create a contact form, retrieve HTML/React/Next.js code with 
 | Permissions | `forms:read`; optional `forms:write` and `submissions:read` |
 | Data access | Only the connected account’s own forms; reading submissions requires explicit permission |
 
-**Connect:** [Lovable and Bolt setup](https://formgong.com/en/docs/mcp/) · [Cursor guide](https://formgong.com/en/docs/cursor/) · [v0 direct form integration](https://formgong.com/en/docs/v0/).
+**Connect:** [Lovable and Bolt setup](https://formgong.com/en/docs/mcp/) · [Cursor guide](https://formgong.com/en/docs/cursor/) · [v0 setup](https://formgong.com/en/docs/v0/).
 
 **Try:** “Create a Formgong form called Contact and add it to my site.” Then send a test submission and check the Formgong inbox. To read messages, request and approve `submissions:read` first.
 
