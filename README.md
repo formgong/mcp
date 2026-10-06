@@ -12,7 +12,7 @@ A remote [Model Context Protocol](https://modelcontextprotocol.io) server for [F
 - **URL:** `https://formgong.com/mcp`
 - **Transport:** Streamable HTTP. It's stateless and returns JSON responses.
 - **Auth:** two ways, pick whichever your client supports.
-  - **OAuth 2.1** (recommended): authorization code with mandatory PKCE (S256) and [dynamic client registration](https://datatracker.ietf.org/doc/html/rfc7591) at `https://formgong.com/oauth/register`, so clients such as Claude Desktop, ChatGPT, Cursor and VS Code can connect with a browser sign-in and no copy-pasted secret. A tool call without credentials returns `401` with `WWW-Authenticate: Bearer realm="formgong", resource_metadata="https://formgong.com/.well-known/oauth-protected-resource/mcp", scope="forms:read forms:write"` ([RFC 9728](https://datatracker.ietf.org/doc/html/rfc9728)); metadata is at [`/.well-known/oauth-authorization-server`](https://formgong.com/.well-known/oauth-authorization-server) and [`/.well-known/oauth-protected-resource/mcp`](https://formgong.com/.well-known/oauth-protected-resource/mcp). Access tokens last 1 hour and rotate with refresh tokens.
+  - **OAuth 2.1** (recommended): authorization code with mandatory PKCE (S256) and [dynamic client registration](https://datatracker.ietf.org/doc/html/rfc7591) at `https://formgong.com/oauth/register`, so clients such as Claude Desktop, Cursor, VS Code, Lovable and Bolt can connect with a browser sign-in and no copy-pasted secret. A tool call without credentials returns `401` with `WWW-Authenticate: Bearer realm="formgong", resource_metadata="https://formgong.com/.well-known/oauth-protected-resource/mcp", scope="forms:read forms:write"` ([RFC 9728](https://datatracker.ietf.org/doc/html/rfc9728)); metadata is at [`/.well-known/oauth-authorization-server`](https://formgong.com/.well-known/oauth-authorization-server) and [`/.well-known/oauth-protected-resource/mcp`](https://formgong.com/.well-known/oauth-protected-resource/mcp). Access tokens last 1 hour and rotate with refresh tokens.
   - **Personal API token:** `Authorization: Bearer fgp_…` for clients that only send static headers.
   - Either way, `initialize`, `ping` and `tools/list` work unauthenticated, so clients and directories can see the tools before signing in.
 - **Scopes:** `forms:read` (always granted), `forms:write`, `submissions:read` (off unless requested).
@@ -20,9 +20,11 @@ A remote [Model Context Protocol](https://modelcontextprotocol.io) server for [F
 
 There's nothing to install: the server runs on formgong.com. This repo holds the documentation and the [`server.json`](./server.json) for the [official MCP Registry](https://registry.modelcontextprotocol.io) (`com.formgong/mcp`).
 
+A short reusable [server card](./server-card.md) lists the connection details, scopes and example prompts.
+
 ## What Formgong does
 
-- **Delivery:** email and Telegram on every plan, including Free. Telegram connects with one button, groups included. Signed JSON webhooks (HMAC-SHA256 `X-Signature`, up to 5 delivery attempts) come with step-by-step recipes for [Make, n8n, Zapier and KeyCRM](https://formgong.com/en/integrations/).
+- **Delivery:** Telegram at once on every plan. Free email arrives as a daily digest; Pro and Business email each submission. Telegram connects with one button, groups included. Signed JSON webhooks (HMAC-SHA256 `X-Signature`, up to 5 delivery attempts) come with step-by-step recipes for [Make, n8n, Zapier and KeyCRM](https://formgong.com/en/integrations/).
 - **EU data:** submissions are stored in the EU (Cloudflare D1 with EU jurisdiction), and the IP address is kept only as a hash. A standard Art. 28 DPA is part of the [Terms](https://formgong.com/en/terms/).
 - **Spam:** no CAPTCHA puzzle and no cookies. There's a honeypot, cookie-free checks and optional Cloudflare Turnstile on every plan. Plain HTML forms without JavaScript keep working.
 - **12 languages:** the thank-you page, errors and auto-reply follow the visitor's language.
@@ -61,7 +63,7 @@ Clients with an OAuth connector skip this step entirely — they sign you in thr
   "mcpServers": {
     "formgong": {
       "url": "https://formgong.com/mcp",
-      "headers": { "Authorization": "Bearer ${env:FORMGONG_TOKEN}" }
+      "auth": { "CLIENT_ID": "cursor", "scopes": ["forms:read", "forms:write"] }
     }
   }
 }
@@ -70,9 +72,10 @@ Clients with an OAuth connector skip this step entirely — they sign you in thr
 ### Claude Code
 
 ```bash
-claude mcp add --transport http formgong https://formgong.com/mcp \
-  --header "Authorization: Bearer fgp_your_token"
+claude mcp add --transport http formgong https://formgong.com/mcp
 ```
+
+Approve the browser sign-in. If you prefer a personal token, add `--header "Authorization: Bearer fgp_your_token"`.
 
 ### Claude Desktop
 
@@ -126,12 +129,18 @@ If your client can't do OAuth and only sends static headers, use the [`mcp-remot
 
 ### Lovable and Bolt
 
-- **Lovable:** go to Settings → Connectors → Custom MCP server. Enter URL `https://formgong.com/mcp`, choose "Bearer token or API key", and paste only the token (without the word `Bearer`).
-- **Bolt:** go to Settings → Connectors (MCP) → Custom MCP server. Enter URL `https://formgong.com/mcp`, set Transport to HTTP and Authentication to API key, then paste the token.
+- **Lovable:** open Connectors → + → MCP server. Name it Formgong and enter `https://formgong.com/mcp`. Keep Direct connection and OAuth; click Add & authorize, sign in to Formgong and approve the permissions. A personal token also works through Bearer token or API key.
+- **Bolt:** open Settings → Connectors (MCP) → Custom MCP server. Name: Formgong. URL: `https://formgong.com/mcp`. Transport: HTTP. Authentication: MCP OAuth. Click Connect, sign in and approve the permissions, then turn on the connector for your project. API key remains available with a personal Formgong token.
+
+The setup controls are documented by [Lovable](https://docs.lovable.dev/integrations/custom-mcp) and [Bolt](https://support.bolt.new/building/using-bolt/connect-mcp). A connector lets the builder obtain code; the published contact form still posts directly to Formgong.
+
+### v0
+
+Use the [v0 contact-form guide](https://formgong.com/en/docs/v0/) and its form prompt. The guide uses direct submissions to Formgong. Custom MCP integration through the [v0 API](https://v0.app/docs/api/v1/reference/chats/create) is a separate, programmatic workflow.
 
 ### Other clients
 
-Any client that supports remote MCP over Streamable HTTP works with the same URL. Clients that implement OAuth 2.1 discovery (the `401` + `WWW-Authenticate` flow) sign in through the browser and need no configuration beyond the URL. Clients that only send static headers use the token header shown above. Clients limited to stdio can use the `mcp-remote` bridge.
+Clients that support remote MCP over Streamable HTTP can use the same URL with a personal token. Browser sign-in requires a callback accepted by Formgong: the listed Cursor/Claude/VS Code callbacks, HTTPS on exactly `lovable.dev` or `bolt.new` (no subdomains, nonstandard ports, userinfo, query or fragment), or an HTTP loopback callback. Each dynamic client stays bound to its complete registered URI. Other hosted origins are refused even when a client calls itself Lovable or Bolt. Stdio-only clients can use the `mcp-remote` bridge.
 
 ## Try it
 
@@ -142,7 +151,7 @@ Any client that supports remote MCP over Streamable HTTP works with the same URL
 ## Security
 
 - Tokens are scoped (`forms:read`, `forms:write`, `submissions:read`), stored only as hashes, can expire, and can be revoked in the dashboard.
-- OAuth grants work the same way: `submissions:read` is never granted unless the client asks for it, access tokens expire after 1 hour, refresh tokens after 30 days with rotation, and every connected app is listed under **Dashboard → Account → API tokens**, where you can revoke it. `https://formgong.com/oauth/revoke` implements [RFC 7009](https://datatracker.ietf.org/doc/html/rfc7009).
+- OAuth grants work the same way: `submissions:read` is never granted unless the client asks for it, access tokens expire after 1 hour, refresh tokens after 30 days with rotation, and every connected app is listed under **Dashboard → Account → Connected apps**, where you can revoke it. `https://formgong.com/oauth/revoke` implements [RFC 7009](https://datatracker.ietf.org/doc/html/rfc7009).
 - Each token can make 60 requests a minute. Requests without a token are limited to 30 a minute per IP, and failed authentication attempts are rate-limited per IP.
 - A tool call without valid credentials gets HTTP `401` with a JSON-RPC error (code `-32001`) whose `data` carries `resourceMetadata`, so a client can start the OAuth flow or tell the user where to create a token.
 - The tools only see forms the token owner owns. Submissions never include IP addresses or user agents.
