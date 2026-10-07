@@ -140,7 +140,7 @@ Open the + menu beside the prompt and choose MCPs. Configure a custom server wit
 
 ### Other clients
 
-Clients that support remote MCP over Streamable HTTP can use the same URL with a personal token. Browser sign-in requires a callback accepted by Formgong: the listed Cursor/Claude/VS Code callbacks, HTTPS on exactly `lovable.dev` or `bolt.new` (no subdomains, nonstandard ports, userinfo, query or fragment), or an HTTP loopback callback. Each dynamic client stays bound to its complete registered URI. Other hosted origins are refused even when a client calls itself Lovable or Bolt. Stdio-only clients can use the `mcp-remote` bridge.
+Clients that support remote MCP over Streamable HTTP can use the same URL with a personal token. Browser sign-in requires a callback accepted by Formgong: the listed Cursor/Claude/VS Code callbacks, Lovable’s exact `https://api.lovable.dev/workspaces/connectors/mcp/oauth/callback` callback, HTTPS on exactly `lovable.dev` or `bolt.new` (no subdomains, nonstandard ports, userinfo, query or fragment), or an HTTP loopback callback. Each dynamic client stays bound to its complete registered URI. Other hosted origins are refused even when a client calls itself Lovable or Bolt. Stdio-only clients can use the `mcp-remote` bridge.
 
 ## Try it
 
