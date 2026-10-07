@@ -130,9 +130,9 @@ If your client can't do OAuth and only sends static headers, use the [`mcp-remot
 ### Lovable and Bolt
 
 - **Lovable:** open Connectors → + → MCP server. Name it Formgong and enter `https://formgong.com/mcp`. Keep Direct connection and OAuth; click Add & authorize, sign in to Formgong and approve the permissions. A personal token also works through Bearer token or API key.
-- **Bolt:** open Settings → Connectors (MCP) → Custom MCP server. Name: Formgong. URL: `https://formgong.com/mcp`. Transport: HTTP. Authentication: MCP OAuth. Click Connect, sign in and approve the permissions, then turn on the connector for your project. API key remains available with a personal Formgong token.
+- **Bolt:** open Settings → Connectors (MCP) → Custom MCP server. Name: Formgong. URL: `https://formgong.com/mcp?auth=required`. Transport: HTTP. Authentication: MCP OAuth. Click Connect, sign in and approve the permissions, then turn on the connector for your project. API key remains available with a personal Formgong token.
 
-The setup controls are documented by [Lovable](https://docs.lovable.dev/integrations/custom-mcp) and [Bolt](https://support.bolt.new/building/using-bolt/connect-mcp). A connector lets the builder obtain code; the published contact form still posts directly to Formgong.
+The setup controls are documented by [Lovable](https://docs.lovable.dev/integrations/custom-mcp) and [Bolt](https://support.bolt.new/building/using-bolt/connect-mcp). The Bolt URL requests authentication before initialization so anonymous discovery is not mistaken for an authorized connection. A connector lets the builder obtain code; the published contact form still posts directly to Formgong.
 
 ### v0
 
