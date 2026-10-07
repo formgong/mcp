@@ -130,9 +130,9 @@ If your client can't do OAuth and only sends static headers, use the [`mcp-remot
 ### Lovable and Bolt
 
 - **Lovable:** open Connectors → + → MCP server. Name it Formgong and enter `https://formgong.com/mcp`. Keep Direct connection and OAuth; click Add & authorize, sign in to Formgong and approve the permissions. A personal token also works through Bearer token or API key.
-- **Bolt:** open Settings → Connectors (MCP) → Custom MCP server. Name: Formgong. URL: `https://formgong.com/mcp`. Transport: HTTP. Authentication: MCP OAuth. Click Connect, sign in and approve the permissions, then turn on the connector for your project. API key remains available with a personal Formgong token.
+- **Bolt:** open Settings → Connectors (MCP) → Custom MCP server. Name: Formgong. URL: `https://formgong.com/mcp?auth=required`. Transport: HTTP. Authentication: MCP OAuth. Click Connect, sign in and approve the permissions, then turn on the connector for your project. API key remains available with a personal Formgong token.
 
-The setup controls are documented by [Lovable](https://docs.lovable.dev/integrations/custom-mcp) and [Bolt](https://support.bolt.new/building/using-bolt/connect-mcp). A connector lets the builder obtain code; the published contact form still posts directly to Formgong.
+The setup controls are documented by [Lovable](https://docs.lovable.dev/integrations/custom-mcp) and [Bolt](https://support.bolt.new/building/using-bolt/connect-mcp). The Bolt URL requests authentication before initialization so anonymous discovery is not mistaken for an authorized connection. A connector lets the builder obtain code; the published contact form still posts directly to Formgong.
 
 ### v0
 
@@ -140,7 +140,7 @@ Open the + menu beside the prompt and choose MCPs. Configure a custom server wit
 
 ### Other clients
 
-Clients that support remote MCP over Streamable HTTP can use the same URL with a personal token. Browser sign-in requires a callback accepted by Formgong: the listed Cursor/Claude/VS Code callbacks, HTTPS on exactly `lovable.dev` or `bolt.new` (no subdomains, nonstandard ports, userinfo, query or fragment), or an HTTP loopback callback. Each dynamic client stays bound to its complete registered URI. Other hosted origins are refused even when a client calls itself Lovable or Bolt. Stdio-only clients can use the `mcp-remote` bridge.
+Clients that support remote MCP over Streamable HTTP can use the same URL with a personal token. Browser sign-in requires a callback accepted by Formgong: the listed Cursor/Claude/VS Code callbacks, Lovable’s exact `https://api.lovable.dev/workspaces/connectors/mcp/oauth/callback` callback, HTTPS on exactly `lovable.dev` or `bolt.new` (no subdomains, nonstandard ports, userinfo, query or fragment), or an HTTP loopback callback. Each dynamic client stays bound to its complete registered URI. Other hosted origins are refused even when a client calls itself Lovable or Bolt. Stdio-only clients can use the `mcp-remote` bridge.
 
 ## Try it
 
