@@ -39,6 +39,10 @@ A short reusable [server card](./server-card.md) lists the connection details, s
 | `create_form` | `forms:write` | Creates a form (`name`, `notify_email`). Submissions are emailed to your account address. It returns the form id, the access key and dashboard links for connecting Telegram and extra recipients. Limit: 10 new forms per hour. |
 | `get_form_snippet` | `forms:read` | Returns code for one form (`form_id`, `framework`: `html` / `react` / `next`, `lang`), with its access key, the `_lang` field, the `botcheck` honeypot, and Turnstile when it's enabled. |
 | `list_recent_submissions` | `submissions:read` | Read-only and opt-in. Returns up to 50 recent submissions with time and submitted fields only (no IP or user agent). Spam is excluded by default. Field values are marked as untrusted visitor input. |
+| `list_webhooks` | `forms:read` | Lists a form's webhooks (`form_id`): id, URL and creation time, never the signing secret. |
+| `create_webhook` | `forms:write` | Adds a public `https` webhook to a form, so n8n, Make or Zapier can register their trigger URL. Returns the form's signing secret. Plan limit per form. |
+| `delete_webhook` | `forms:write` | Removes one webhook from a form you own. |
+| `list_website_templates` | `forms:read` | Lists free, MIT-licensed website templates (complete sites with the contact form already wired to Formgong): niche, live demo, source, HTML download and a start command. Optional `topic`. Start a new site from one instead of generating every page. |
 
 ## 1. Create an API token (only if your client can't do OAuth)
 

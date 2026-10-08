@@ -8,7 +8,7 @@ Let your assistant create a contact form, retrieve HTML/React/Next.js code with 
 | Transport | Streamable HTTP, JSON responses |
 | Authentication | OAuth 2.1 browser sign-in with mandatory PKCE S256, or `Authorization: Bearer fgp_…` |
 | Public discovery | `initialize`, `ping`, `tools/list`; every tool call requires authentication |
-| Tools | `list_forms`, `create_form`, `get_form_snippet`, `list_recent_submissions` |
+| Tools | `list_forms`, `create_form`, `get_form_snippet`, `list_recent_submissions`, `list_webhooks`, `create_webhook`, `delete_webhook`, `list_website_templates` |
 | Permissions | `forms:read`; optional `forms:write` and `submissions:read` |
 | Data access | Only the connected account’s own forms; reading submissions requires explicit permission |
 
