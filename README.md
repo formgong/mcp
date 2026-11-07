@@ -24,12 +24,12 @@ A short reusable [server card](./server-card.md) lists the connection details, s
 
 ## What Formgong does
 
-- **Delivery:** Telegram at once on every plan. Free email arrives as a daily digest; Pro and Business email each submission. Telegram connects with one button, groups included. Signed JSON webhooks (HMAC-SHA256 `X-Signature`, up to 5 delivery attempts) come with step-by-step recipes for [Make, n8n, Zapier and KeyCRM](https://formgong.com/en/integrations/).
+- **Delivery:** Telegram at once on every plan. Email goes out for every submission on every plan. Telegram connects with one button, groups included. Signed JSON webhooks (HMAC-SHA256 `X-Signature`, up to 5 delivery attempts) come with step-by-step recipes for [Make, n8n, Zapier and KeyCRM](https://formgong.com/en/integrations/).
 - **EU data:** submissions are stored in the EU (Cloudflare D1 with EU jurisdiction), and the IP address is kept only as a hash. A standard Art. 28 DPA is part of the [Terms](https://formgong.com/en/terms/).
 - **Spam:** no CAPTCHA puzzle and no cookies. There's a honeypot, cookie-free checks and optional Cloudflare Turnstile on every plan. Plain HTML forms without JavaScript keep working.
 - **12 languages:** the thank-you page, errors and auto-reply follow the visitor's language.
 - **Agencies:** [Projects](https://formgong.com/en/for/agencies/) group forms per client (up to 100 on every plan), with view-only client invites and handover to the client's own account.
-- **Pricing:** the free plan has 300 submissions a month and unlimited forms. Pro is $5 a month and Business $15 (as of Oct 2026). Free shows a small "Form powered by Formgong" link on the hosted thank-you page and in emails.
+- **Pricing:** the free plan has 250 submissions a month and unlimited forms. Paid plans: Starter $6 a month for 1,000, Pro $19 for 25,000 and Agency $39 for 50,000 (as of Nov 2026). Free shows a small "Form powered by Formgong" link on the hosted thank-you page and in emails.
 
 ## Tools
 
@@ -48,7 +48,7 @@ A short reusable [server card](./server-card.md) lists the connection details, s
 
 Clients with an OAuth connector skip this step entirely — they sign you in through the browser. Create a token only for clients that send a static `Authorization` header.
 
-1. Sign up at https://formgong.com (the free plan includes 300 submissions a month, and data is stored in the EU), then confirm your email.
+1. Sign up at https://formgong.com (the free plan includes 250 submissions a month, and data is stored in the EU), then confirm your email.
 2. Open **Dashboard → Account → API tokens**.
 3. Name the token after the tool that will use it, and choose the access:
    - "Create forms" is on by default.
