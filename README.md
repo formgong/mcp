@@ -24,7 +24,7 @@ A short reusable [server card](./server-card.md) lists the connection details, s
 
 ## What Formgong does
 
-- **Delivery:** Telegram at once on every plan. Email goes out for every submission on every plan. Telegram connects with one button, groups included. Signed JSON webhooks (HMAC-SHA256 `X-Signature`, up to 5 delivery attempts) come with step-by-step recipes for [Make, n8n, Zapier and KeyCRM](https://formgong.com/en/integrations/).
+- **Delivery:** Telegram at once on every plan. Email goes out for every submission on every plan. Telegram connects with one button, groups included. Discord, Slack, Google Sheets and Notion are built in too. Signed JSON webhooks (HMAC-SHA256 `X-Signature`, up to 5 delivery attempts) come with step-by-step recipes for [Make, n8n, Zapier and KeyCRM](https://formgong.com/en/integrations/).
 - **EU data:** submissions are stored in the EU (Cloudflare D1 with EU jurisdiction), and the IP address is kept only as a hash. A standard Art. 28 DPA is part of the [Terms](https://formgong.com/en/terms/).
 - **Spam:** no CAPTCHA puzzle and no cookies. There's a honeypot, cookie-free checks and optional Cloudflare Turnstile on every plan. Plain HTML forms without JavaScript keep working.
 - **12 languages:** the thank-you page, errors and auto-reply follow the visitor's language.
@@ -40,7 +40,7 @@ A short reusable [server card](./server-card.md) lists the connection details, s
 | `get_form_snippet` | `forms:read` | Returns code for one form (`form_id`, `framework`: `html` / `react` / `next`, `lang`), with its access key, the `_lang` field, the `botcheck` honeypot, and Turnstile when it's enabled. |
 | `list_recent_submissions` | `submissions:read` | Read-only and opt-in. Returns up to 50 recent submissions with time and submitted fields only (no IP or user agent). Spam is excluded by default. Field values are marked as untrusted visitor input. |
 | `list_webhooks` | `forms:read` | Lists a form's webhooks (`form_id`): id, URL and creation time, never the signing secret. |
-| `create_webhook` | `forms:write` | Adds a public `https` webhook to a form, so n8n, Make or Zapier can register their trigger URL. Returns the form's signing secret. Plan limit per form. |
+| `create_webhook` | `forms:write` | Adds a public `https` webhook to a form, so n8n, Make or Zapier can register their trigger URL. A Discord or Slack incoming webhook URL gets each submission as a chat message in that channel. Returns the form's signing secret. Plan limit per form. |
 | `delete_webhook` | `forms:write` | Removes one webhook from a form you own. |
 | `list_website_templates` | `forms:read` | Lists free, MIT-licensed website templates (complete sites with the contact form already wired to Formgong): niche, live demo, source, HTML download and a start command. Optional `topic`. Start a new site from one instead of generating every page. |
 
@@ -49,7 +49,7 @@ A short reusable [server card](./server-card.md) lists the connection details, s
 Clients with an OAuth connector skip this step entirely — they sign you in through the browser. Create a token only for clients that send a static `Authorization` header.
 
 1. Sign up at https://formgong.com (the free plan includes 250 submissions a month, and data is stored in the EU), then confirm your email.
-2. Open **Dashboard → Account → API tokens**.
+2. Open **Dashboard → Settings → Integrations & API**.
 3. Name the token after the tool that will use it, and choose the access:
    - "Create forms" is on by default.
    - "Read recent submissions" is off unless you turn it on.
@@ -155,7 +155,7 @@ Clients that support remote MCP over Streamable HTTP can use the same URL with a
 ## Security
 
 - Tokens are scoped (`forms:read`, `forms:write`, `submissions:read`), stored only as hashes, can expire, and can be revoked in the dashboard.
-- OAuth grants work the same way: `submissions:read` is never granted unless the client asks for it, access tokens expire after 1 hour, refresh tokens after 30 days with rotation, and every connected app is listed under **Dashboard → Account → Connected apps**, where you can revoke it. `https://formgong.com/oauth/revoke` implements [RFC 7009](https://datatracker.ietf.org/doc/html/rfc7009).
+- OAuth grants work the same way: `submissions:read` is never granted unless the client asks for it, access tokens expire after 1 hour, refresh tokens after 30 days with rotation, and every connected app is listed under **Dashboard → Settings → Integrations & API** (Connected apps), where you can revoke it. `https://formgong.com/oauth/revoke` implements [RFC 7009](https://datatracker.ietf.org/doc/html/rfc7009).
 - Each token can make 60 requests a minute. Requests without a token are limited to 30 a minute per IP, and failed authentication attempts are rate-limited per IP.
 - A tool call without valid credentials gets HTTP `401` with a JSON-RPC error (code `-32001`) whose `data` carries `resourceMetadata`, so a client can start the OAuth flow or tell the user where to create a token.
 - The tools only see forms the token owner owns. Submissions never include IP addresses or user agents.
